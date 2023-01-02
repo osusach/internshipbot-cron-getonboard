@@ -40,7 +40,7 @@ async function app() {
 
   const internships = (await fetchJobsFromPages(totalPages)) as Job[];
 
-  console.log(`[🚀] ${internships.length} possible internships were found`);
+  console.log(`[🚀] ${internships?.length} possible internships were found`);
 }
 
 app();

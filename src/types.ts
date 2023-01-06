@@ -2,6 +2,10 @@ export type Job = {
   id: string;
   attributes: {
     title: string;
+    description: string;
+    functions: string;
+    benefits?: string;
+    desirable?: string;
     min_salary?: number;
     max_salary?: number;
     remote_modality: string;

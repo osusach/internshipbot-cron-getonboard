@@ -18,6 +18,7 @@ async function fetchJobsFromPages(totalPages: number) {
     numberToArray(totalPages).map(async (page) => {
       const { data: jobs } = await getGetonboardJobs(page);
       const internshipsInCurrentPage = jobs.filter((job) => {
+        // modality 4 = Internship, seniortiy 1 = no experience required
         if (
           job.attributes.modality.data.id === 4 ||
           job.attributes.seniority.data.id === 1
@@ -32,15 +33,29 @@ async function fetchJobsFromPages(totalPages: number) {
   return internships.flat(Infinity);
 }
 
+// Correct format to send to API
+function formatOffer(offer: Job) {
+  return {
+    author: offer.attributes.company.data.id,
+    description: `${offer.attributes.title} <br /> ${offer.attributes.description} <br /> ${offer.attributes.functions} <br /> ${offer.attributes.desirable} <br /> ${offer.attributes.benefits}`,
+    source: "GetOnBoard",
+  };
+}
+
 async function app() {
   console.log("[🚀] App running!");
 
   const response = await getGetonboardJobs(1);
   let totalPages = response.meta.total_pages; // max of 100 jobs per page, min of 1 page
 
-  const internships = (await fetchJobsFromPages(totalPages)) as Job[];
+  const rawInternships = (await fetchJobsFromPages(totalPages)) as Job[];
+  const formattedInternships = rawInternships.map((internship) =>
+    formatOffer(internship)
+  );
 
-  console.log(`[🚀] ${internships?.length} possible internships were found`);
+  console.log(formattedInternships[0]);
+
+  console.log(`[🚀] ${rawInternships?.length} possible internships were found`);
 }
 
 app();

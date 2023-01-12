@@ -1,3 +1,4 @@
+import cron from "node-cron";
 import axios from "axios";
 import { type Job, type Response } from "./types";
 import { numberToArray } from "./utils";
@@ -58,4 +59,7 @@ async function app() {
   console.log(`[🚀] ${rawInternships?.length} possible internships were found`);
 }
 
-app();
+// runs every sunday (7) at 13:30 / 1:30pm
+cron.schedule("30 13 * * 7", () => {
+  app();
+});

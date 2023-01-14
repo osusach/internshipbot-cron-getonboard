@@ -2,6 +2,8 @@
 Query possible internships every monday
 
 ## Getting Started
+This project uses env variables, create a `.env` file in the root directory and add `SECRET_PASS` for our API to accept the incoming request, and `INTERNSHIPBOT_ENDPOINT` to especify the api endpoint we are currently using.
+
 To run this project locally, install the dependencies and run the local server:
 
 ```sh

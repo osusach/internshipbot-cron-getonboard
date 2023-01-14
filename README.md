@@ -2,6 +2,18 @@
 Query possible internships every monday
 
 ## Getting Started
+To run this project locally, install the dependencies and run the local server:
+
+```sh
+npm install
+npm run dev
+```
+
+To build for production:
+
+```sh
+npm run build
+```
 
 ## Technologies
 

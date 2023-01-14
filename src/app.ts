@@ -1,11 +1,18 @@
 import cron from "node-cron";
 import axios from "axios";
+import dotenv from "dotenv";
 import { type Job, type Response } from "./types";
 import { numberToArray } from "./utils";
 
+// load env file, read with process.env.NAME_OF_ENV_VARIABLE
+dotenv.config();
+
+const SECRET_PASS = process.env.SECRET_PASS;
+const INTERNSHIPBOT_ENDPOINT = process.env.INTERNSHIPBOT_ENDPOINT;
 const GETONBOARD_ENDPOINT =
   "https://www.getonbrd.com/api/v0/categories/programming/jobs";
 
+// get all jobs from getonboard page
 async function getGetonboardJobs(page: number) {
   const { data } = (await axios.get(GETONBOARD_ENDPOINT, {
     params: { page, country_code: "CL" },
@@ -14,12 +21,13 @@ async function getGetonboardJobs(page: number) {
   return data;
 }
 
+// get internships and no experience required jobs from all pages
 async function fetchJobsFromPages(totalPages: number) {
   const internships = await Promise.all(
     numberToArray(totalPages).map(async (page) => {
       const { data: jobs } = await getGetonboardJobs(page);
       const internshipsInCurrentPage = jobs.filter((job) => {
-        // modality 4 = Internship, seniortiy 1 = no experience required
+        // modality 4 = internship, seniortiy 1 = no experience required
         if (
           job.attributes.modality.data.id === 4 ||
           job.attributes.seniority.data.id === 1
@@ -34,7 +42,7 @@ async function fetchJobsFromPages(totalPages: number) {
   return internships.flat(Infinity);
 }
 
-// Correct format to send to API
+// correct format to send to API
 function formatOffer(offer: Job) {
   return {
     author: offer.attributes.company.data.id,
@@ -54,9 +62,29 @@ async function app() {
     formatOffer(internship)
   );
 
-  console.log(formattedInternships[0]);
+  console.log(
+    `[🚀] ${rawInternships?.length} possible internships or no-experience required jobs were found`
+  );
 
-  console.log(`[🚀] ${rawInternships?.length} possible internships were found`);
+  console.log("[📞] Sending offers to API...");
+
+  // request to be send to our API
+  const internshipsPromises = formattedInternships.map((jobOffer) => {
+    return axios({
+      method: "post",
+      url: INTERNSHIPBOT_ENDPOINT,
+      data: { ...jobOffer, pass: SECRET_PASS },
+    });
+  });
+
+  try {
+    // send all POST request at the same time
+    await axios.all(internshipsPromises);
+
+    console.log("[📞] Offers sent!");
+  } catch (error) {
+    console.log("[⚠️] there was an error", error);
+  }
 }
 
 // runs every sunday (7) at 13:30 / 1:30pm

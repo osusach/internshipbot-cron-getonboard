@@ -1,5 +1,5 @@
 # Internship Bot, GetOnBoard Job Offers
-Query possible internships every monday
+Send possible internships and no-experience required job offers from getonboard to our own api every sunday at 1:30pm.
 
 ## Getting Started
 This project uses env variables, create a `.env` file in the root directory and add `SECRET_PASS` for our API to accept the incoming request, and `INTERNSHIPBOT_ENDPOINT` to especify the api endpoint we are currently using.

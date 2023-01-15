@@ -2,7 +2,7 @@ import cron from "node-cron";
 import axios from "axios";
 import dotenv from "dotenv";
 import { type Job, type Response } from "./types";
-import { numberToArray } from "./utils";
+import { numberToArray, getCurrentDate } from "./utils";
 
 // load env file, read with process.env.NAME_OF_ENV_VARIABLE
 dotenv.config();
@@ -85,19 +85,14 @@ async function app() {
   }
 }
 
-console.log("[🚀]: server up");
+console.log("[🚀]: server up", getCurrentDate());
 
-// runs every sunday (0) at 4:50pm
-cron.schedule("50 16 * * 0", async () => {
+// runs every sunday (0) at 20:13 UTC
+cron.schedule("13 20 * * 0", async () => {
   console.log("[🚀] Running CRON job");
   app();
 });
 
 cron.schedule("* * * * *", async () => {
-  const rawDate = new Date();
-  const date = new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "full",
-    timeStyle: "long",
-  }).format(rawDate);
-  console.log("👌", date);
+  console.log("👌", getCurrentDate());
 });

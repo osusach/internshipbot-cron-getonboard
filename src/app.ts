@@ -46,7 +46,7 @@ async function fetchJobsFromPages(totalPages: number) {
 function formatOffer(offer: Job) {
   return {
     author: offer.attributes.company.data.id,
-    description: `${offer.attributes.title} <br /> ${offer.attributes.description} <br /> ${offer.attributes.functions} <br /> ${offer.attributes.desirable} <br /> ${offer.attributes.benefits}`,
+    offer: `${offer.attributes.title} <br /> ${offer.attributes.description} <br /> ${offer.attributes.functions} <br /> ${offer.attributes.desirable} <br /> ${offer.attributes.benefits}`,
     source: "GetOnBoard",
   };
 }
@@ -87,7 +87,7 @@ async function app() {
   }
 }
 
-// runs every sunday (7) at 13:30 / 1:30pm
-cron.schedule("30 13 * * 7", () => {
+// runs every sunday (0) at 3:45pm
+cron.schedule("45 15 * * 0", () => {
   app();
 });

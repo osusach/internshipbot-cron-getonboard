@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "build": "tsup src",
-    "start": "node dist/app.js",
+    "start": "tsup src && node dist/app.js",
     "dev": "concurrently \"tsup src --watch\" \"nodemon dist/app.js\""
   },
   "keywords": [],

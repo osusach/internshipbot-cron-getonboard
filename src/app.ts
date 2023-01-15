@@ -52,7 +52,7 @@ function formatOffer(offer: Job) {
 }
 
 async function app() {
-  console.log("[🚀] App running!");
+  console.log("[🚀] Running CRON job");
 
   const response = await getGetonboardJobs(1);
   let totalPages = response.meta.total_pages; // max of 100 jobs per page, min of 1 page
@@ -87,7 +87,9 @@ async function app() {
   }
 }
 
-// runs every sunday (0) at 3:45pm
-cron.schedule("45 15 * * 0", () => {
+console.log("[🚀]: server up");
+
+// runs every sunday (0) at 4:20pm
+cron.schedule("20 16 * * 0", () => {
   app();
 });

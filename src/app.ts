@@ -94,5 +94,10 @@ cron.schedule("50 16 * * 0", async () => {
 });
 
 cron.schedule("* * * * *", async () => {
-  console.log("👌");
+  const rawDate = new Date();
+  const date = new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "full",
+    timeStyle: "long",
+  }).format(rawDate);
+  console.log("👌", date);
 });

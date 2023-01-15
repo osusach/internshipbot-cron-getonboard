@@ -89,10 +89,6 @@ console.log("[🚀]: server up", getCurrentDate());
 
 // runs every sunday (0) at 20:13 UTC
 cron.schedule("13 20 * * 0", async () => {
-  console.log("[🚀] Running CRON job");
+  console.log("[🚀] Running CRON job", getCurrentDate());
   app();
-});
-
-cron.schedule("* * * * *", async () => {
-  console.log("👌", getCurrentDate());
 });

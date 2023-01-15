@@ -87,8 +87,12 @@ async function app() {
 
 console.log("[🚀]: server up");
 
-// runs every sunday (0) at 4:20pm
-cron.schedule("30 16 * * 0", () => {
+// runs every sunday (0) at 4:50pm
+cron.schedule("50 16 * * 0", async () => {
   console.log("[🚀] Running CRON job");
   app();
+});
+
+cron.schedule("* * * * *", async () => {
+  console.log("👌");
 });
